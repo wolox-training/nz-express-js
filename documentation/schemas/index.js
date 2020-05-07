@@ -1,7 +1,4 @@
-const user = require('./user');
-
 module.exports = {
-  ...user,
   Error: {
     type: 'object',
     properties: {
