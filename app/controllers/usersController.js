@@ -28,14 +28,10 @@ function hashPassword(body) {
   return hashedPassword;
 }
 
-function insertUser(body) {
-  User.create(body).then(logger.info(`${body.firstName} created`));
-}
-
 exports.createUser = ({ body }, res) => {
   validateUserFields(body)
     .then(validFields => hashPassword(validFields))
-    .then(validAndHashFields => insertUser(validAndHashFields))
+    .then(hashedFields => User.create(hashedFields))
     .then(user => res.status(201).json(user))
     .catch(error => {
       logger.error(`Failed to created a user: ${error}`);
