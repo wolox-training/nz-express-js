@@ -1,5 +1,6 @@
 const logger = require('../logger');
 const User = require('../models').user;
+const { databaseError } = require('../errors');
 
 const validateUserFields = require('../helpers/validationsHelper');
 const hashPassword = require('../helpers/passwordHasherHelper');
@@ -11,6 +12,6 @@ exports.createUser = ({ body }, res) => {
     .then(user => res.status(201).json(user))
     .catch(error => {
       logger.error(`Failed to created a user: ${error}`);
-      res.status(400).send({ message: error.message });
+      res.status(400).send(databaseError(error.message));
     });
 };
