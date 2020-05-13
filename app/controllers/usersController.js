@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const logger = require('../logger');
-const User = require('../models').users;
+const User = require('../models').user;
 
 const emailValidator = require('../helpers/emailVerificationHelper');
 const passwordValidator = require('../helpers/passwordVerificationHelper');
