@@ -1,11 +1,9 @@
 const bcrypt = require('bcrypt');
 const logger = require('../logger');
+const User = require('../models').users;
 
-const db = require('../models/index');
 const emailValidator = require('../helpers/emailVerificationHelper');
 const passwordValidator = require('../helpers/passwordVerificationHelper');
-
-const User = db.sequelize.models.users;
 
 function validateUserFields(body) {
   if (emailValidator(body.email) && passwordValidator(body.password)) {
@@ -29,6 +27,7 @@ function hashPassword(body) {
 }
 
 exports.createUser = ({ body }, res) => {
+  console.log(User);
   validateUserFields(body)
     .then(validFields => hashPassword(validFields))
     .then(hashedFields => User.create(hashedFields))
