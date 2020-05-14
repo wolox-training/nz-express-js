@@ -10,6 +10,5 @@ module.exports = body => {
       resolve({ ...body, password: hash });
     });
   });
-
   return hashedPassword;
 };

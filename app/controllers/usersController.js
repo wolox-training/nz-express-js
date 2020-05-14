@@ -1,17 +1,17 @@
-const logger = require('../logger');
-const User = require('../models').user;
 const { databaseError } = require('../errors');
-
-const validateUserFields = require('../helpers/validationsHelper');
 const hashPassword = require('../helpers/passwordHasherHelper');
 
-exports.createUser = ({ body }, res) => {
-  validateUserFields(body)
-    .then(validFields => hashPassword(validFields))
-    .then(hashedFields => User.create(hashedFields))
-    .then(user => res.status(201).json(user))
+const HTTP_CODES = require('../constants/httpCodes');
+const logger = require('../logger');
+
+const User = require('../models').user;
+
+exports.createUser = ({ body }, res, next) => {
+  hashPassword(body)
+    .then(userParams => User.create(userParams))
+    .then(user => res.status(HTTP_CODES.CREATED).json(user))
     .catch(error => {
-      logger.error(`Failed to created a user: ${error}`);
-      res.status(400).send(databaseError(error.message));
+      logger.error(`Failed to create user: ${error.message}`);
+      next(databaseError('Unable to create the user'));
     });
 };
