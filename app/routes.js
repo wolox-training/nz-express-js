@@ -1,10 +1,10 @@
 const { healthCheck } = require('./controllers/healthCheck');
 const { createUser } = require('./controllers/usersController');
 
-const validateUserParams = require('./middlewares/user');
+const { checkMailIsAlreadyInUse, checkUserSchema } = require('./middlewares/user');
 
 exports.init = app => {
   app.get('/health', healthCheck);
 
-  app.post('/users', validateUserParams, createUser);
+  app.post('/users', [checkUserSchema, checkMailIsAlreadyInUse], createUser);
 };
