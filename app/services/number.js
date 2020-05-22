@@ -1,3 +1,15 @@
 const axios = require('axios');
+const logger = require('../logger');
 
-exports.getFacts = number => axios.get(`http://numbersapi.com/${number}`).then(({ data }) => data);
+const {
+  numberService: { baseUrl }
+} = require('../../config').common;
+
+exports.getFacts = number => {
+  const url = `${baseUrl}/${number}`;
+
+  axios.get(url).then(({ data }) => {
+    logger.info(`Fetch number ${number} fact at ${url}: ${data}`);
+    return data;
+  });
+};
