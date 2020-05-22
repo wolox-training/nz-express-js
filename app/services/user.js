@@ -1,8 +1,10 @@
 const User = require('../models').user;
 const hashPassword = require('../helpers/passwordHasherHelper');
+const logger = require('../logger');
 
 exports.findUserByEmail = email => {
-  User.findOne({
+  logger.info(`Searching user by email: ${email}`);
+  return User.findOne({
     where: {
       email
     }
@@ -10,5 +12,6 @@ exports.findUserByEmail = email => {
 };
 
 exports.createUser = body => {
-  hashPassword(body).then(userParams => User.create(userParams));
+  logger.info('Creating user...');
+  return hashPassword(body).then(userParams => User.create(userParams));
 };

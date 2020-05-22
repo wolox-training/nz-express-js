@@ -1,4 +1,4 @@
-exports.passwordSchema = {
+const passwordSchema = {
   exists: {
     errorMessage: 'Password must be present'
   },
@@ -8,12 +8,27 @@ exports.passwordSchema = {
   }
 };
 
-exports.emailSchema = {
+const emailSchema = {
   exists: {
     errorMessage: 'Email must be present'
   },
   matches: {
     errorMessage: 'Email must be from the Wolox domain',
     options: /\S+@wolox.\S+/
+  }
+};
+
+exports.userSchema = {
+  email: emailSchema,
+  password: passwordSchema,
+  firstName: {
+    exists: {
+      errorMessage: 'First name must be present'
+    }
+  },
+  lastName: {
+    exists: {
+      errorMessage: 'Last name must be present'
+    }
   }
 };
