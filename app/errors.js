@@ -14,3 +14,6 @@ exports.modelValidationError = message => internalError(message, exports.MODEL_V
 
 exports.EMAIL_ALREADY_IN_USE = 'email_already_in_use';
 exports.emailRepeatedError = message => internalError(message, exports.EMAIL_ALREADY_IN_USE);
+
+exports.SESSION_ERROR = 'password_or_email_incorrect';
+exports.sessionError = message => internalError(message, exports.SESSION_ERROR);
