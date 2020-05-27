@@ -88,7 +88,18 @@ describe('POST #signup', () => {
 });
 
 describe('GET #index', () => {
-  describe('whitout authentication', () => {
+  describe('whit no authentication', () => {
+    test('It returns an error', async done => {
+      const response = await request(app).get('/users');
+
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
+  });
+
+  describe('with authentication', () => {
     test('It returns an error', async done => {
       const response = await request(app).get('/users');
 
