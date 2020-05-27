@@ -86,3 +86,16 @@ describe('POST #signup', () => {
     done();
   });
 });
+
+describe('GET #index', () => {
+  describe('whitout authentication', () => {
+    test('It returns an error', async done => {
+      const response = await request(app).get('/users');
+
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
+  });
+});
