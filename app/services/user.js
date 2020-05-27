@@ -32,3 +32,11 @@ exports.listUser = request => {
     throw databaseError('Unable to list users');
   });
 };
+
+exports.listUser = request => {
+  logger.info('Listing users...');
+  return User.findAndCountAll({
+    limit: request.query.limit,
+    offset: request.skip
+  });
+};

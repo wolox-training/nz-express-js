@@ -13,12 +13,8 @@ const { sessionSchema } = require('./schemas/session');
 exports.init = app => {
   app.get('/health', healthCheck);
 
-<<<<<<< HEAD
   app.post('/users', [validateSchema(userSchema)], createUser);
   app.get('/users', [authenticateEndpoint, paginate.middleware(3, 5)], indexUser);
-=======
-  app.post('/users', [validateSchema(userSchema), checkMailIsAlreadyInUse], createUser);
   app.get('/users', [authenticateEndpoint], indexUser);
->>>>>>> Add endpoint and authorization for the endpoint
   app.post('/users/sessions', [validateSchema(sessionSchema), validatePassword], createSession);
 };
