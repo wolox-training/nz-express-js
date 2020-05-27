@@ -18,5 +18,9 @@ exports.emailRepeatedError = message => internalError(message, exports.EMAIL_ALR
 exports.SESSION_ERROR = 'password_or_email_incorrect';
 exports.sessionError = message => internalError(message, exports.SESSION_ERROR);
 
+<<<<<<< HEAD
 exports.UNAUTHORIZED_ERROR = 'unauthorized';
+=======
+exports.UNAUTHORIZED_ERROR = 'unathorized';
+>>>>>>> Add endpoint and authorization for the endpoint
 exports.unauthorizedError = message => internalError(message, exports.UNAUTHORIZED_ERROR);

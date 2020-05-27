@@ -44,6 +44,7 @@ const comparePassword = async (request, _response, next) => {
 };
 
 // eslint-disable-next-line consistent-return
+<<<<<<< HEAD
 exports.authenticateEndpoint = async (request, response, next) => {
   const authHeader = request.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
@@ -59,5 +60,21 @@ exports.authenticateEndpoint = async (request, response, next) => {
     logger.error(`Unauthorized access: ${err}`);
     next(unauthorizedError('Unauthorized'));
   }
+=======
+exports.authenticateEndpoint = (request, response, next) => {
+  const authHeader = request.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token === null) return next(unauthorizedError('Unauthorized'));
+
+  jwt.verify(token, secret, (err, user) => {
+    if (err) {
+      logger.error(`Unauthorized access: ${err}`);
+      next(unauthorizedError('Unauthorized'));
+    } else {
+      request.user = user;
+      next();
+    }
+  });
+>>>>>>> Add endpoint and authorization for the endpoint
 };
 exports.validatePassword = [findUser, comparePassword];

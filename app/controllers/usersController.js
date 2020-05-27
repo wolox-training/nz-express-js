@@ -27,3 +27,8 @@ exports.indexUser = (request, response, next) => {
       next(error);
     });
 };
+
+// eslint-disable-next-line no-unused-vars
+exports.indexUser = (request, response, _next) => {
+  response.status(HTTP_CODES.OK).json({ bien: 'vieja' });
+};
