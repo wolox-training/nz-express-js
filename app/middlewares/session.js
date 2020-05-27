@@ -1,8 +1,14 @@
 const bcrypt = require('bcrypt');
 const util = require('util');
+const jwt = require('jsonwebtoken');
 
 const { findUserByEmail } = require('../services/user');
-const { sessionError } = require('../errors');
+const { sessionError, unauthorizedError } = require('../errors');
+const logger = require('../logger');
+
+const {
+  session: { secret }
+} = require('../../config').common;
 
 // eslint-disable-next-line consistent-return
 const findUser = async (request, _response, next) => {
@@ -37,4 +43,20 @@ const comparePassword = async (request, _response, next) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
+exports.authenticateEndpoint = (request, response, next) => {
+  const authHeader = request.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token === null) return next(unauthorizedError('Unauthorized'));
+
+  jwt.verify(token, secret, (err, user) => {
+    if (err) {
+      logger.error(`Unauthorized access: ${err}`);
+      next(unauthorizedError('Unauthorized'));
+    } else {
+      request.user = user;
+      next();
+    }
+  });
+};
 exports.validatePassword = [findUser, comparePassword];

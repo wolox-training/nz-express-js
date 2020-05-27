@@ -13,3 +13,7 @@ exports.createUser = ({ body }, res, next) => {
       next(error);
     });
 };
+
+exports.indexUser = (request, response, next) => {
+  response.status(HTTP_CODES.OK).json({bien: "vieja"});
+};
