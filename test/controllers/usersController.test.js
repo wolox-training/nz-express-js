@@ -126,7 +126,7 @@ describe('POST #signup', () => {
         email: 'test@wolox.com.ar',
         password: '12345678'
       });
-    
+
     expect(response.statusCode).toEqual(400);
     expect(response.body).toHaveProperty('internal_code', 'email_already_in_use');
     expect(response.body).toHaveProperty('message', 'Email already in use');
