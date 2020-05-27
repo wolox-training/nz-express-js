@@ -15,3 +15,11 @@ exports.createUser = body => {
   logger.info('Creating user...');
   return hashPassword(body).then(userParams => User.create(userParams));
 };
+
+exports.listUser = request => {
+  logger.info('Listing users...');
+  return User.findAndCountAll({
+    limit: request.query.limit,
+    offset: request.skip
+  });
+};
