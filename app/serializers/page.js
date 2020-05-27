@@ -4,11 +4,7 @@ exports.pageSerializer = (queryResult, request, serializerFunction) => {
 
   return {
     data: queryResult.rows.map(element => serializerFunction(element)),
-<<<<<<< HEAD
     totalElements: itemCount,
-=======
-    totalUsers: itemCount,
->>>>>>> Add serializers
     page: request.query.page,
     totalPages: pageCount
   };
