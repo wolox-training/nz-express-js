@@ -1,11 +1,14 @@
 const errors = require('../errors');
 const logger = require('../logger');
 
-const DEFAULT_STATUS_CODE = 500;
+const HTTP_CODES = require('../constants/httpCodes');
+
+const DEFAULT_STATUS_CODE = HTTP_CODES.INTERNAL_ERROR;
 
 const statusCodes = {
-  [errors.DATABASE_ERROR]: 503,
-  [errors.DEFAULT_ERROR]: 500
+  [errors.DATABASE_ERROR]: HTTP_CODES.SERVICE_UNAVAILABLE,
+  [errors.DEFAULT_ERROR]: HTTP_CODES.INTERNAL_ERROR,
+  [errors.MODEL_VALIDATION_ERROR]: HTTP_CODES.BAD_REQUEST
 };
 
 exports.handle = (error, req, res, next) => {
