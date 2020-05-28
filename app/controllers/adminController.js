@@ -13,9 +13,9 @@ exports.createAdminUser = ({ body }, res, next) => {
           res.status(HTTP_CODES.OK).json(userSerializer(updatedUser));
         });
       } else {
-        createUser({ ...body, admin: true }).then(neWuser => {
-          logger.info(`Created user with id: ${neWuser.id} and admin privileges`);
-          res.status(HTTP_CODES.CREATED).json(userSerializer(neWuser));
+        createUser({ ...body, admin: true }).then(newUser => {
+          logger.info(`Created user with id: ${newUser.id} and admin privileges`);
+          res.status(HTTP_CODES.CREATED).json(userSerializer(newUser));
         });
       }
     })
