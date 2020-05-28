@@ -23,3 +23,8 @@ exports.listUser = request => {
     offset: request.skip
   });
 };
+
+exports.updateToAdminUser = user => {
+  logger.info('Updating user with admin priviliges...');
+  return user.update({ admin: true });
+};
