@@ -1,17 +1,11 @@
-const { databaseError } = require('../errors');
-const { createUser } = require('../services/user');
+const { createUser } = require('../interactors/user');
 
 const HTTP_CODES = require('../constants/httpCodes');
 const logger = require('../logger');
 
-exports.createUser = ({ body }, res, next) => {
-  createUser(body)
-    .then(user => {
-      logger.info(`Created user with id: ${user.id}`);
-      res.status(HTTP_CODES.CREATED).json(user);
-    })
-    .catch(error => {
-      logger.error(`Failed to create user: ${error.message}`);
-      next(databaseError('Unable to create the user'));
-    });
+exports.createUser = (req, res, next) => {
+  createUser(req, res, next).then(user => {
+    logger.info(`Created user with id: ${user.id}`);
+    res.status(HTTP_CODES.CREATED).json(user);
+  });
 };
