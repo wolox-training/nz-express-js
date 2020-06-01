@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  User.associate = ({ Weet }) => {
-    User.hasMany(Weet);
+  User.associate = ({ weet }) => {
+    User.hasMany(weet);
   };
 
   return User;

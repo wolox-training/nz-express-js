@@ -6,8 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
-  Weet.associate = ({ User }) => {
-    Weet.belongsTo(User);
+  Weet.associate = ({ user }) => {
+    Weet.belongsTo(user, { foreignKey: 'userId' });
   };
+
   return Weet;
 };
