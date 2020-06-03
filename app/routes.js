@@ -4,6 +4,7 @@ const { healthCheck } = require('./controllers/healthCheck');
 const { createUser, indexUser } = require('./controllers/usersController');
 const { createSession } = require('./controllers/sessionsController');
 const { createAdminUser } = require('./controllers/adminController');
+const { createWeet } = require('./controllers/weetsController');
 
 const { checkMailIsAlreadyInUse } = require('./middlewares/user');
 const { validateSchema } = require('./middlewares/schema_validator');
@@ -19,6 +20,8 @@ exports.init = app => {
   app.post('/users', [validateSchema(userSchema), checkMailIsAlreadyInUse], createUser);
   app.get('/users', [authenticateEndpoint, paginate.middleware(3, 5)], indexUser);
   app.post('/users/sessions', [validateSchema(sessionSchema), validatePassword], createSession);
+
+  app.post('/weets', [authenticateEndpoint], createWeet);
 
   app.post(
     '/admin/users',
