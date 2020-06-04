@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const util = require('util');
 
 const { findUserByEmail } = require('../services/user');
 const { sessionError } = require('../errors');
@@ -16,7 +17,9 @@ const comparePassword = (request, _response, next) => {
   const givenPassword = request.body.password;
   const { user } = request;
 
-  bcrypt.compare(givenPassword, user.password, (err, res) => {
+  const comparePasswordPromise = util.promisify(bcrypt.compare);
+
+  comparePasswordPromise(givenPassword, user.password).then(res => {
     if (res) {
       next();
     } else {
