@@ -1,7 +1,5 @@
 const request = require('supertest');
-const mockery = require('mockery');
 const { factory } = require('factory-girl');
-const { numberMock } = require('../mock/number');
 const { factoryByModel } = require('../factory/factory_by_models');
 const app = require('../../app');
 // const User = require('../../app/models').user;
@@ -9,8 +7,9 @@ const app = require('../../app');
 describe('POST #signup', () => {
   // eslint-disable-next-line init-declarations
   let jwtToken;
+  factoryByModel('user');
+
   beforeEach(async done => {
-    factoryByModel('user');
     const userAttributes = await factory.attrs('user');
 
     await request(app)
@@ -29,17 +28,10 @@ describe('POST #signup', () => {
       });
 
     jwtToken = loginRequest.body.token;
-    mockery.enable();
     done();
   });
 
-  afterEach(() => {
-    mockery.disable();
-  });
-
   test('testing the mock', async done => {
-    mockery.registerMock('../services/number', numberMock.normalFact);
-
     const loginRequest = await request(app)
       .post('/users/sessions')
       .send({
