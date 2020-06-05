@@ -1,52 +1,110 @@
 const request = require('supertest');
+const axios = require('axios');
+
 const { factory } = require('factory-girl');
 const { factoryByModel } = require('../factory/factory_by_models');
+const { numberMockBodies } = require('../mock/number');
 const app = require('../../app');
-// const User = require('../../app/models').user;
+const Weet = require('../../app/models').weet;
+const User = require('../../app/models').user;
 
-describe('POST #signup', () => {
+jest.mock('axios');
+describe('POST #createweet', () => {
   // eslint-disable-next-line init-declarations
   let jwtToken;
   factoryByModel('user');
 
-  beforeEach(async done => {
-    const userAttributes = await factory.attrs('user');
+  describe('with no authentication', () => {
+    test('It returns an error', async done => {
+      const response = await request(app).post('/weets');
 
-    await request(app)
-      .post('/users')
-      .send({
-        ...userAttributes,
-        email: 'normal_user@wolox.com.ar',
-        password: 'validpassword12345678'
-      });
-
-    const loginRequest = await request(app)
-      .post('/users/sessions')
-      .send({
-        email: 'normal_user@wolox.com.ar',
-        password: 'validpassword12345678'
-      });
-
-    jwtToken = loginRequest.body.token;
-    done();
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
   });
 
-  test('testing the mock', async done => {
-    const loginRequest = await request(app)
-      .post('/users/sessions')
-      .send({
-        email: 'normal_user@wolox.com.ar',
-        password: 'validpassword12345678'
+  describe('with authentication', () => {
+    beforeEach(async done => {
+      const userAttributes = await factory.attrs('user');
+
+      await request(app)
+        .post('/users')
+        .send({
+          ...userAttributes,
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      const loginRequest = await request(app)
+        .post('/users/sessions')
+        .send({
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      jwtToken = loginRequest.body.token;
+      done();
+    });
+
+    test('with a normal number fact, it creates a weet', async done => {
+      axios.get.mockImplementationOnce(() =>
+        Promise.resolve({
+          data: numberMockBodies.normalFact
+        })
+      );
+
+      const loginRequest = await request(app)
+        .post('/users/sessions')
+        .send({
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      jwtToken = loginRequest.body.token;
+
+      const response = await request(app)
+        .post('/weets')
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      const createdWeet = await Weet.findOne();
+      const author = await User.findOne({
+        where: {
+          email: 'normal_user@wolox.com.ar'
+        }
       });
 
-    jwtToken = loginRequest.body.token;
+      expect(response.statusCode).toEqual(201);
+      expect(createdWeet.content).toEqual(numberMockBodies.normalFact);
+      expect(createdWeet.userId).toEqual(author.id);
+      done();
+    });
 
-    const response = await request(app)
-      .post('/weets')
-      .set('Authorization', `Bearer ${jwtToken}`);
+    test('with a long number fact, it returns an error', async done => {
+      axios.get.mockImplementationOnce(() =>
+        Promise.resolve({
+          data: numberMockBodies.longFact
+        })
+      );
 
-    console.log(response);
-    expect(response.statusCode).toEqual(201);
-    done();
+      const loginRequest = await request(app)
+        .post('/users/sessions')
+        .send({
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      jwtToken = loginRequest.body.token;
+
+      const response = await request(app)
+        .post('/weets')
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(response.statusCode).toEqual(400);
+      expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
+      expect(response.body).toHaveProperty('message', 'Weet is too long');
+      done();
+    });
   });
 });
