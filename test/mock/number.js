@@ -1,8 +1,6 @@
-exports.numberMock = {
-  // eslint-disable-next-line no-unused-vars
-  normalFact: _number => 'The half of 1 is your belly bottom',
-  // eslint-disable-next-line no-unused-vars
-  longFact: _number => `this fact is considerable more than 140 characters, which means the weets creation
+exports.numberMockBodies = {
+  normalFact: 'The half of 1 is your belly bottom',
+  longFact: `this fact is considerable more than 140 characters, which means the weets creation
    would not be posible. The reason this string is hardcoded instead of getting an actual fact that is more
    than 140 characters longs from the service is because the numbers api service is down and I am unable
    to gather an actual number fact from the service, but to stay true to myself here is a number fact...
