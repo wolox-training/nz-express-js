@@ -1,5 +1,4 @@
-const { databaseError } = require('../errors');
-const { createUser } = require('../services/user');
+const { createUser } = require('../interactors/user');
 
 const HTTP_CODES = require('../constants/httpCodes');
 const logger = require('../logger');
@@ -11,7 +10,6 @@ exports.createUser = ({ body }, res, next) => {
       res.status(HTTP_CODES.CREATED).json(user);
     })
     .catch(error => {
-      logger.error(`Failed to create user: ${error.message}`);
-      next(databaseError('Unable to create the user'));
+      next(error);
     });
 };
