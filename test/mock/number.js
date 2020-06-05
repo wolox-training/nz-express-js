@@ -1,5 +1,5 @@
 exports.numberMockBodies = {
-  normalFact: 'The half of 1 is your belly bottom',
+  normalFact: 'The half of 1 is your belly button',
   longFact: `this fact is considerable more than 140 characters, which means the weets creation
    would not be posible. The reason this string is hardcoded instead of getting an actual fact that is more
    than 140 characters longs from the service is because the numbers api service is down and I am unable
