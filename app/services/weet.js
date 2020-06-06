@@ -7,3 +7,11 @@ exports.createWeet = (user, randomQuote) =>
     logger.error(`Failed to create weet: ${error.message}`);
     throw databaseError('Unable to create the weet');
   });
+
+exports.listWeets = ({ query }) => {
+  logger.info('Listing weets...');
+  return Weet.findAndCountAll({
+    limit: query.limit,
+    offset: query.limit * query.page
+  });
+};
