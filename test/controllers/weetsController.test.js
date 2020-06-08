@@ -86,6 +86,50 @@ describe('POST #createweet', () => {
       expect(response.statusCode).toEqual(400);
       expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
       expect(response.body).toHaveProperty('message', 'Weet is too long');
+<<<<<<< HEAD
+=======
+      done();
+    });
+  });
+});
+
+describe('GET #indexWeet', () => {
+  let jwtToken;
+  factoryByModel('user');
+
+  describe('with no authentication', () => {
+    test('It returns an error', async done => {
+      const response = await request(app).get('/weets');
+
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
+  });
+
+  describe('with authentication', () => {
+    beforeEach(async done => {
+      const userAttributes = await factory.attrs('user');
+
+      await request(app)
+        .post('/users')
+        .send({
+          ...userAttributes,
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      const loginRequest = await request(app)
+        .post('/users/sessions')
+        .send({
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      jwtToken = loginRequest.body.token;
+
+>>>>>>> Test skeleton
       done();
     });
   });
