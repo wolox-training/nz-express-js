@@ -86,8 +86,6 @@ describe('POST #createweet', () => {
       expect(response.statusCode).toEqual(400);
       expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
       expect(response.body).toHaveProperty('message', 'Weet is too long');
-<<<<<<< HEAD
-=======
       done();
     });
   });
@@ -129,7 +127,6 @@ describe('GET #indexWeet', () => {
 
       jwtToken = loginRequest.body.token;
 
->>>>>>> Test skeleton
       done();
     });
   });

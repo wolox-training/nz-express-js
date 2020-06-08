@@ -23,7 +23,5 @@ exports.indexUser = (request, response, next) => {
     .then(result => {
       response.status(HTTP_CODES.OK).json(pageSerializer(result, request, userSerializer));
     })
-    .catch(error => {
-      next(error);
-    });
+    .catch(e => next(e));
 };
