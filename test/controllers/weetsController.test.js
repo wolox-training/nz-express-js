@@ -55,15 +55,6 @@ describe('POST #createweet', () => {
         })
       );
 
-      const loginRequest = await request(app)
-        .post('/users/sessions')
-        .send({
-          email: 'normal_user@wolox.com.ar',
-          password: 'validpassword12345678'
-        });
-
-      jwtToken = loginRequest.body.token;
-
       const response = await request(app)
         .post('/weets')
         .set('Authorization', `Bearer ${jwtToken}`);
@@ -87,15 +78,6 @@ describe('POST #createweet', () => {
           data: numberMockBodies.longFact
         })
       );
-
-      const loginRequest = await request(app)
-        .post('/users/sessions')
-        .send({
-          email: 'normal_user@wolox.com.ar',
-          password: 'validpassword12345678'
-        });
-
-      jwtToken = loginRequest.body.token;
 
       const response = await request(app)
         .post('/weets')
