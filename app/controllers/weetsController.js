@@ -3,7 +3,7 @@ const logger = require('../logger');
 
 const { createWeet, listWeet } = require('../interactors/weet');
 const { weetSerializer } = require('../serializers/weet');
-const { pageSerializer } = require('../services/page');
+const { pageSerializer } = require('../serializers/page');
 
 exports.createWeet = (req, res, next) => {
   createWeet(req)

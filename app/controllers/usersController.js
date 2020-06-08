@@ -23,8 +23,5 @@ exports.indexUser = (request, response, next) => {
     .then(result => {
       response.status(HTTP_CODES.OK).json(pageSerializer(result, request, userSerializer));
     })
-    .catch(error => {
-      logger.error(`Failed to list users: ${error.message}`);
-      next(databaseError('Unable to list users'));
-    });
+    .catch(e => next(e));
 };
