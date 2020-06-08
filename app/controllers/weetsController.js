@@ -1,7 +1,8 @@
 const HTTP_CODES = require('../constants/httpCodes');
 const logger = require('../logger');
 
-const { createWeet, listWeet } = require('../interactors/weet');
+const { createWeet } = require('../interactors/weet');
+const { listWeets } = require('../services/weet');
 const { weetSerializer } = require('../serializers/weet');
 const { pageSerializer } = require('../serializers/page');
 
@@ -15,7 +16,7 @@ exports.createWeet = (req, res, next) => {
 };
 
 exports.indexWeet = (req, res, next) => {
-  listWeet(req)
+  listWeets(req)
     .then(result => {
       res.status(HTTP_CODES.OK).json(pageSerializer(result, req, weetSerializer));
     })

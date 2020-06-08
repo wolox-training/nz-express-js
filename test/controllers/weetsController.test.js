@@ -133,21 +133,43 @@ describe('GET #indexWeet', () => {
 
       done();
     });
-  });
 
-  test('With valid params, it returns a page', async done => {
-    const response = await request(app)
-      .get('/weets')
-      .query({ limit: 1, page: 1 })
-      .set('Authorization', `Bearer ${jwtToken}`);
+    test('With valid params, it returns a page', async done => {
+      const response = await request(app)
+        .get('/weets')
+        .query({ limit: 1, page: 1 })
+        .set('Authorization', `Bearer ${jwtToken}`);
 
-    expect(response.statusCode).toEqual(200);
-    expect(response.body).toHaveProperty('data', [
-      { 'admin?': false, email: 'foo@wolox.com.ar', firstName: 'Foo', id: 2, lastName: 'Bar' }
-    ]);
-    expect(response.body).toHaveProperty('page', 2);
-    expect(response.body).toHaveProperty('totalElements', 2);
-    expect(response.body).toHaveProperty('totalPages', 2);
-    done();
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toHaveProperty('data', [{ content: expect.any(String) }]);
+      expect(response.body).toHaveProperty('page', 1);
+      expect(response.body).toHaveProperty('totalElements', 5);
+      expect(response.body).toHaveProperty('totalPages', 5);
+      done();
+    });
+
+    test('With an exced page, it returns a page', async done => {
+      const response = await request(app)
+        .get('/weets')
+        .query({ limit: 1, page: 6 })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(response.statusCode).toEqual(404);
+      expect(response.body).toHaveProperty('internal_code', 'page_does_not_exist');
+      expect(response.body).toHaveProperty('message', 'This page exceed the query');
+      done();
+    });
+
+    test('With invalid params, it returns an error', async done => {
+      const response = await request(app)
+        .get('/weets')
+        .query({ limit: 1, page: -1 })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(response.statusCode).toEqual(400);
+      expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
+      expect(response.body).toHaveProperty('message', 'Page must be 1 or more');
+      done();
+    });
   });
 });

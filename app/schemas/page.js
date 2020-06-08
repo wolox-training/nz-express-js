@@ -1,4 +1,4 @@
-const isANaturalNumber = val => Number.isInteger(val) && val > 0;
+const isANaturalNumber = val => val > 0;
 
 exports.pageSchema = {
   page: {
@@ -6,6 +6,9 @@ exports.pageSchema = {
     custom: {
       errorMessage: 'Page must be 1 or more',
       options: isANaturalNumber
+    },
+    customSanitizer: {
+      options: val => parseInt(val)
     }
   },
   limit: {
@@ -13,6 +16,9 @@ exports.pageSchema = {
     custom: {
       errorMessage: 'Limit must be 1 or more',
       options: isANaturalNumber
+    },
+    customSanitizer: {
+      options: val => parseInt(val)
     }
   }
 };
