@@ -51,7 +51,7 @@ describe('POST #signup', () => {
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
-    expect(response.body).toHaveProperty('message', 'Invalid user input');
+    expect(response.body).toHaveProperty('message', 'Email must be from the Wolox domain');
 
     expect(createdUser.length).toEqual(0);
     done();
@@ -77,7 +77,7 @@ describe('POST #signup', () => {
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
-    expect(response.body).toHaveProperty('message', 'Invalid user input');
+    expect(response.body).toHaveProperty('message', 'Password must be at least 6 characters long');
 
     expect(createdUser.length).toEqual(0);
     done();
@@ -101,7 +101,10 @@ describe('POST #signup', () => {
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
-    expect(response.body).toHaveProperty('message', 'Invalid user input');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Email must be present; Email must be from the Wolox domain'
+    );
 
     expect(createdUser.length).toEqual(0);
     done();
@@ -124,15 +127,15 @@ describe('POST #signup', () => {
         password: '12345678'
       });
 
+    expect(response.statusCode).toEqual(400);
+    expect(response.body).toHaveProperty('internal_code', 'email_already_in_use');
+    expect(response.body).toHaveProperty('message', 'Email already in use');
+
     const createdUser = await User.findAll({
       where: {
         email: 'test@wolox.com.ar'
       }
     });
-
-    expect(response.statusCode).toEqual(503);
-    expect(response.body).toHaveProperty('internal_code', 'database_error');
-    expect(response.body).toHaveProperty('message', 'Unable to create the user');
 
     expect(createdUser.length).toEqual(1);
     expect(createdUser[0].firstName).toEqual('Test');
