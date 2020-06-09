@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 const { databaseError } = require('../errors');
+=======
+const Sequelize = require('sequelize');
+>>>>>>> This is not working
 const User = require('../models').user;
+const Rating = require('../models').rating;
+const Weet = require('../models').weet;
+
 const hashPassword = require('../helpers/passwordHasherHelper');
 const logger = require('../logger');
 
@@ -36,4 +43,22 @@ exports.listUser = request => {
 exports.updateToAdminUser = user => {
   logger.info('Updating user with admin priviliges...');
   return user.update({ admin: true });
+};
+
+exports.getPosition = async userPromise => {
+  logger.info('Getting user position...');
+
+  console.log(weetsId);
+
+  return Rating.findAll({
+    attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'totalScore']],
+    include: [Weet],
+    where: {
+      id: {
+        [Sequelize.op.in]: userPromise
+          .then(user => user.getWeets())
+          .then(weetsArray => weetsArray.map(weet => weet.id))
+      }
+    }
+  });
 };

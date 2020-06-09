@@ -20,11 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
-    },
-    points: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
     }
   });
 
