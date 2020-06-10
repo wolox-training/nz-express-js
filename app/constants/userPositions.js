@@ -1,0 +1,8 @@
+module.exports = {
+  DEVELOPER: 0,
+  LEAD_DEVELOPER: 6,
+  TECHNICAL_LEADER: 10,
+  ENGINEER_MANAGER: 20,
+  HEAD: 30,
+  CEO: 50
+};
