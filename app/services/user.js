@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const { databaseError } = require('../errors');
-=======
 const Sequelize = require('sequelize');
->>>>>>> This is not working
 const User = require('../models').user;
 const Rating = require('../models').rating;
 const Weet = require('../models').weet;
