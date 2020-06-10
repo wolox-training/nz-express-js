@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize');
+const { findLastKey } = require('lodash');
+
 const User = require('../models').user;
-const Rating = require('../models').rating;
-const Weet = require('../models').weet;
+const POSITIONS = require('../constants/userPositions');
 
 const hashPassword = require('../helpers/passwordHasherHelper');
 const logger = require('../logger');
@@ -41,6 +41,7 @@ exports.updateToAdminUser = user => {
   return user.update({ admin: true });
 };
 
+<<<<<<< HEAD
 exports.getPosition = async userPromise => {
   logger.info('Getting user position...');
 
@@ -58,3 +59,6 @@ exports.getPosition = async userPromise => {
     }
   });
 };
+=======
+exports.getPosition = ({ points }) => findLastKey(POSITIONS, positionScore => positionScore <= points);
+>>>>>>> Fix test

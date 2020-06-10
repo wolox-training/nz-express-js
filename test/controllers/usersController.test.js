@@ -195,8 +195,22 @@ describe('GET #index', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('data', [
-        { 'admin?': false, email: 'test@wolox.com.ar', firstName: 'Test', id: 1, lastName: 'McTesting' },
-        { 'admin?': false, email: 'foo@wolox.com.ar', firstName: 'Foo', id: 2, lastName: 'Bar' }
+        {
+          'admin?': false,
+          email: 'test@wolox.com.ar',
+          firstName: 'Test',
+          id: 1,
+          lastName: 'McTesting',
+          position: 'DEVELOPER'
+        },
+        {
+          'admin?': false,
+          email: 'foo@wolox.com.ar',
+          firstName: 'Foo',
+          id: 2,
+          lastName: 'Bar',
+          position: 'DEVELOPER'
+        }
       ]);
       expect(response.body).toHaveProperty('page', 1);
       expect(response.body).toHaveProperty('totalElements', 2);
@@ -212,7 +226,14 @@ describe('GET #index', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('data', [
-        { 'admin?': false, email: 'test@wolox.com.ar', firstName: 'Test', id: 1, lastName: 'McTesting' }
+        {
+          'admin?': false,
+          email: 'test@wolox.com.ar',
+          firstName: 'Test',
+          id: 1,
+          lastName: 'McTesting',
+          position: 'DEVELOPER'
+        }
       ]);
       expect(response.body).toHaveProperty('page', 1);
       expect(response.body).toHaveProperty('totalElements', 2);
@@ -228,7 +249,14 @@ describe('GET #index', () => {
 
       expect(response.statusCode).toEqual(200);
       expect(response.body).toHaveProperty('data', [
-        { 'admin?': false, email: 'foo@wolox.com.ar', firstName: 'Foo', id: 2, lastName: 'Bar' }
+        {
+          'admin?': false,
+          email: 'foo@wolox.com.ar',
+          firstName: 'Foo',
+          id: 2,
+          lastName: 'Bar',
+          position: 'DEVELOPER'
+        }
       ]);
       expect(response.body).toHaveProperty('page', 2);
       expect(response.body).toHaveProperty('totalElements', 2);
