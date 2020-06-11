@@ -5,6 +5,7 @@ const { createUser, indexUser } = require('./controllers/usersController');
 const { createSession } = require('./controllers/sessionsController');
 const { createAdminUser } = require('./controllers/adminController');
 const { createWeet, indexWeet } = require('./controllers/weetsController');
+const { createRating } = require('./controllers/ratingsController');
 
 const { checkMailIsAlreadyInUse } = require('./middlewares/user');
 const { validateSchema } = require('./middlewares/schema_validator');
@@ -14,6 +15,7 @@ const { validateAdminUser } = require('./middlewares/admin');
 const { userSchema } = require('./schemas/user');
 const { sessionSchema } = require('./schemas/session');
 const { pageSchema } = require('./schemas/page');
+const { ratingSchema } = require('./schemas/rating');
 
 exports.init = app => {
   app.get('/health', healthCheck);
@@ -24,6 +26,8 @@ exports.init = app => {
 
   app.post('/weets', [authenticateEndpoint], createWeet);
   app.get('/weets', [authenticateEndpoint, validateSchema(pageSchema)], indexWeet);
+
+  app.post('/weets/:id/ratings', [authenticateEndpoint, validateSchema(ratingSchema)], createRating);
 
   app.post(
     '/admin/users',
