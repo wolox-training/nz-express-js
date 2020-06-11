@@ -1,5 +1,7 @@
 const { findLastKey } = require('lodash');
 
+const { userNotFound } = require('../errors');
+
 const User = require('../models').user;
 const POSITIONS = require('../constants/userPositions');
 
@@ -34,3 +36,9 @@ exports.updateToAdminUser = user => {
 };
 
 exports.getPosition = ({ points }) => findLastKey(POSITIONS, positionScore => positionScore <= points);
+
+exports.findUser = id =>
+  User.findByPk(id).then(result => {
+    if (result) return result;
+    throw userNotFound('User not found');
+  });

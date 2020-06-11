@@ -1,5 +1,11 @@
 const HTTP_CODES = require('../constants/httpCodes');
 
-exports.createRating = (_req, res) => {
-  res.status(HTTP_CODES.CREATED).json({ hola: 'mimi' });
+const { createRating } = require('../interactors/rating');
+
+exports.createRating = ({ params, user, body }, res, next) => {
+  createRating(params.id, user.email, body.score)
+    .then(() => {
+      res.sendStatus(HTTP_CODES.OK);
+    })
+    .catch(e => next(e));
 };
