@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.associate = ({ weet, rating }) => {
     User.hasMany(weet);
-    User.hasMany(rating);
+    User.hasMany(rating, { foreignKey: 'ratingUserId' });
   };
 
   return User;

@@ -24,3 +24,9 @@ exports.unauthorizedError = message => internalError(message, exports.UNAUTHORIZ
 
 exports.PAGE_DOES_NOT_EXIST = 'page_does_not_exist';
 exports.pageLimitExceed = message => internalError(message, exports.PAGE_DOES_NOT_EXIST);
+
+exports.WEET_NOT_FOUND = 'weet_not_found';
+exports.weetNotFound = message => internalError(message, exports.WEET_NOT_FOUND);
+
+exports.USER_NOT_FOUND = 'user_not_found';
+exports.userNotFound = message => internalError(message, exports.USER_NOT_FOUND);
