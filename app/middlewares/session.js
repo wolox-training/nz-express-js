@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const util = require('util');
 
 const { findUserByEmail } = require('../services/user');
 const { sessionError, unauthorizedError } = require('../errors');
@@ -31,20 +32,33 @@ const comparePassword = (request, _response, next) => {
   });
 };
 
+const setCurrentUser = ({ email, iat }, request) => {
+  findUserByEmail(email).then(dbUser => {
+    if (dbUser.logoutTime && iat <= dbUser.logoutTime) throw unauthorizedError('Unauthorized');
+    request.user = dbUser;
+  });
+};
+
 // eslint-disable-next-line consistent-return
 exports.authenticateEndpoint = (request, response, next) => {
   const authHeader = request.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
+  const verifyJwt = util.promisify(jwt.verify);
+
   if (token === null) return next(unauthorizedError('Unauthorized'));
 
-  jwt.verify(token, secret, (err, user) => {
-    if (err) {
-      logger.error(`Unauthorized access: ${err}`);
+  try {
+    const { error, result } = verifyJwt(token, secret);
+    if (error) {
+      logger.error(`Unauthorized access: ${error}`);
       next(unauthorizedError('Unauthorized'));
     } else {
-      request.user = user;
+      setCurrentUser(result, request);
       next();
     }
-  });
+  } catch (err) {
+    next(err);
+  }
 };
+
 exports.validatePassword = [findUser, comparePassword];

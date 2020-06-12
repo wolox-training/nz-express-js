@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0,
       allowNull: false
+    },
+    logoutTime: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   });
 
