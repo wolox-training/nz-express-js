@@ -2,7 +2,7 @@ const paginate = require('express-paginate');
 
 const { healthCheck } = require('./controllers/healthCheck');
 const { createUser, indexUser } = require('./controllers/usersController');
-const { createSession } = require('./controllers/sessionsController');
+const { createSession, deleteSession } = require('./controllers/sessionsController');
 const { createAdminUser } = require('./controllers/adminController');
 const { createWeet, indexWeet } = require('./controllers/weetsController');
 const { createRating } = require('./controllers/ratingsController');
@@ -23,6 +23,7 @@ exports.init = app => {
   app.get('/users', [authenticateEndpoint, paginate.middleware(3, 5)], indexUser);
   app.get('/users', [authenticateEndpoint], indexUser);
   app.post('/users/sessions', [validateSchema(sessionSchema), validatePassword], createSession);
+  app.post('/users/sessions/invalidate_all', [authenticateEndpoint], deleteSession);
 
   app.post('/weets', [authenticateEndpoint], createWeet);
   app.get('/weets', [authenticateEndpoint, validateSchema(pageSchema)], indexWeet);
