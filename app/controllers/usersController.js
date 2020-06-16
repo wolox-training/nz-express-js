@@ -1,5 +1,4 @@
 const { createUser } = require('../interactors/user');
-const { databaseError } = require('../errors');
 const { listUser } = require('../services/user');
 const { userSerializer } = require('../serializers/user');
 const { pageSerializer } = require('../serializers/page');
@@ -24,7 +23,6 @@ exports.indexUser = (request, response, next) => {
       response.status(HTTP_CODES.OK).json(pageSerializer(result, request, userSerializer));
     })
     .catch(error => {
-      logger.error(`Failed to list users: ${error.message}`);
-      next(databaseError('Unable to list users'));
+      next(error);
     });
 };

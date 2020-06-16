@@ -27,5 +27,8 @@ exports.listUser = request => {
   return User.findAndCountAll({
     limit: request.query.limit,
     offset: request.skip
+  }).catch(error => {
+    logger.error(`Failed to list users: ${error.message}`);
+    throw databaseError('Unable to list users');
   });
 };
