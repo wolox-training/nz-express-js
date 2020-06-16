@@ -44,19 +44,20 @@ const comparePassword = async (request, _response, next) => {
 };
 
 // eslint-disable-next-line consistent-return
-exports.authenticateEndpoint = (request, response, next) => {
+exports.authenticateEndpoint = async (request, response, next) => {
   const authHeader = request.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
+  const verifyJwt = util.promisify(jwt.verify);
   if (token === null) return next(unauthorizedError('Unauthorized'));
 
-  jwt.verify(token, secret, (err, user) => {
-    if (err) {
-      logger.error(`Unauthorized access: ${err}`);
-      next(unauthorizedError('Unauthorized'));
-    } else {
-      request.user = user;
-      next();
-    }
-  });
+  try {
+    const result = await verifyJwt(token, secret);
+    // eslint-disable-next-line require-atomic-updates
+    request.user = result;
+    next();
+  } catch (err) {
+    logger.error(`Unauthorized access: ${err}`);
+    next(unauthorizedError('Unauthorized'));
+  }
 };
 exports.validatePassword = [findUser, comparePassword];
