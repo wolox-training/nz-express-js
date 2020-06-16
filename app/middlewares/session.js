@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const util = require('util');
 
 const { findUserByEmail } = require('../services/user');
 const { sessionError, unauthorizedError } = require('../errors');
@@ -9,26 +10,37 @@ const {
   session: { secret }
 } = require('../../config').common;
 
-const findUser = (request, _response, next) => {
-  // eslint-disable-next-line consistent-return
-  findUserByEmail(request.body.email).then(user => {
-    if (!user) return next(sessionError('User not found'));
-    request.user = user;
+// eslint-disable-next-line consistent-return
+const findUser = async (request, _response, next) => {
+  const userEmail = request.body.email;
+
+  try {
+    const dbUser = await findUserByEmail(userEmail);
+    if (!dbUser) return next(sessionError('User not found'));
+    // eslint-disable-next-line require-atomic-updates
+    request.user = dbUser;
     next();
-  });
+  } catch (err) {
+    next(err);
+  }
 };
 
-const comparePassword = (request, _response, next) => {
+const comparePassword = async (request, _response, next) => {
   const givenPassword = request.body.password;
   const { user } = request;
 
-  bcrypt.compare(givenPassword, user.password, (err, res) => {
-    if (res) {
+  const comparePasswordPromise = util.promisify(bcrypt.compare);
+
+  try {
+    const compareResult = await comparePasswordPromise(givenPassword, user.password);
+    if (compareResult) {
       next();
     } else {
       next(sessionError('Password not match'));
     }
-  });
+  } catch (err) {
+    next(err);
+  }
 };
 
 // eslint-disable-next-line consistent-return

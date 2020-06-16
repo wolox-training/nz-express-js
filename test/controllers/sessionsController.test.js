@@ -1,13 +1,17 @@
 const request = require('supertest');
+const { factory } = require('factory-girl');
+const { factoryByModel } = require('../factory/factory_by_models');
 const app = require('../../app');
 
-describe('POST #signip', () => {
+describe('POST #signin', () => {
+  factoryByModel('user');
   beforeEach(async done => {
+    const userAttributes = await factory.attrs('user');
+
     await request(app)
       .post('/users')
       .send({
-        firstName: 'Test',
-        lastName: 'McTesting',
+        ...userAttributes,
         email: 'test@wolox.com.ar',
         password: '12345678'
       });
