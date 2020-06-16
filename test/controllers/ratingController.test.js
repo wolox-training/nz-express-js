@@ -34,6 +34,7 @@ describe('POST #createRating', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'weet_creator@wolox.com.ar',
           password: 'validpassword12345678'
         });
@@ -42,6 +43,7 @@ describe('POST #createRating', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'login_user@wolox.com.ar',
           password: 'validpassword12345678'
         });
