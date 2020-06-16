@@ -109,6 +109,7 @@ describe('POST #invalidate_all', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'login_user@wolox.com.ar',
           password: 'validpassword12345678'
         });
@@ -124,7 +125,7 @@ describe('POST #invalidate_all', () => {
       done();
     });
 
-    test('when invalidating all user token, the user must login again to use the auth endpoints', async () => {
+    test('when invalidating all user token, the user must login again to use the auth endpoints', async done => {
       const invalidateRequest = await request(app)
         .post('/users/sessions/invalidate_all')
         .send({
@@ -146,6 +147,7 @@ describe('POST #invalidate_all', () => {
       expect(authRequiredRequest.statusCode).toEqual(401);
       expect(authRequiredRequest.body).toHaveProperty('internal_code', 'unauthorized');
       expect(authRequiredRequest.body).toHaveProperty('message', 'Unauthorized');
+      done();
     });
   });
 });

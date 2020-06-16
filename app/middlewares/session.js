@@ -51,7 +51,6 @@ exports.authenticateEndpoint = async (request, response, next) => {
   try {
     const result = await verifyJwt(token, secret);
     const user = await getCurrentUser(result);
-    // console.log(user);
     // eslint-disable-next-line require-atomic-updates
     request.user = user;
     next();
