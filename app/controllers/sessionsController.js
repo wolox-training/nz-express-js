@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const HTTP_CODES = require('../constants/httpCodes');
 
-const setLogoutTime = require('../services/user');
+const { setLogoutTime } = require('../services/user');
 
 const {
   session: { secret }
