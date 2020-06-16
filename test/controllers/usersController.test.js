@@ -127,15 +127,15 @@ describe('POST #signup', () => {
         password: '12345678'
       });
 
-    expect(response.statusCode).toEqual(400);
-    expect(response.body).toHaveProperty('internal_code', 'email_already_in_use');
-    expect(response.body).toHaveProperty('message', 'Email already in use');
-
     const createdUser = await User.findAll({
       where: {
         email: 'test@wolox.com.ar'
       }
     });
+
+    expect(response.statusCode).toEqual(400);
+    expect(response.body).toHaveProperty('internal_code', 'email_already_in_use');
+    expect(response.body).toHaveProperty('message', 'Email already in use');
 
     expect(createdUser.length).toEqual(1);
     expect(createdUser[0].firstName).toEqual('Test');
