@@ -33,6 +33,7 @@ describe('POST #createweet', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'normal_user@wolox.com.ar',
           password: 'validpassword12345678'
         });
@@ -116,6 +117,7 @@ describe('GET #indexWeet', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'normal_user@wolox.com.ar',
           password: 'validpassword12345678'
         });
