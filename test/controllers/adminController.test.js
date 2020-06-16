@@ -39,6 +39,7 @@ describe('#POST createAdminUser', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'admin@wolox.com.ar',
           password: 'validpassword12345678'
         });
@@ -47,6 +48,7 @@ describe('#POST createAdminUser', () => {
         .post('/users')
         .send({
           ...userAttributes,
+          logoutTime: null,
           email: 'notadmin@wolox.com.ar',
           password: 'validpassword12345678'
         });

@@ -1,6 +1,7 @@
-/* eslint-disable no-unused-vars */
 const jwt = require('jsonwebtoken');
 const HTTP_CODES = require('../constants/httpCodes');
+
+const setLogoutTime = require('../services/user');
 
 const {
   session: { secret }
@@ -11,4 +12,8 @@ exports.createSession = ({ body: { email } }, res) => {
   res.status(HTTP_CODES.OK).json({ token });
 };
 
-exports.deleteSession = (req, res, next) => res.sendStatus(HTTP_CODES.OK);
+exports.deleteSession = ({ user }, res, next) => {
+  setLogoutTime(user)
+    .then(() => res.sendStatus(HTTP_CODES.OK))
+    .catch(err => next(err));
+};

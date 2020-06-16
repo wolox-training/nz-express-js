@@ -2,10 +2,6 @@
 /* eslint-disable no-unused-vars */
 const request = require('supertest');
 const { factory } = require('factory-girl');
-<<<<<<< HEAD
-=======
-
->>>>>>> Added migration and a couple of test
 const { factoryByModel } = require('../factory/factory_by_models');
 const app = require('../../app');
 
@@ -127,6 +123,30 @@ describe('POST #invalidate_all', () => {
 
       jwtToken = loginRequest.body.token;
       done();
+    });
+
+    test('when invalidating all user token, the user must login again to use the auth endpoints', async () => {
+      const invalidateRequest = await request(app)
+        .post('/users/sessions/invalidate_all')
+        .send({
+          email: 'login_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(invalidateRequest.statusCode).toEqual(200);
+
+      const authRequiredRequest = await request(app)
+        .post('/users/sessions/invalidate_all')
+        .send({
+          email: 'login_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(authRequiredRequest.statusCode).toEqual(401);
+      expect(authRequiredRequest.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(authRequiredRequest.body).toHaveProperty('message', 'Unauthorized');
     });
   });
 });
