@@ -1,7 +1,8 @@
 const { databaseError } = require('../errors');
-const { createUser, listUser } = require('../services/user');
+const { listUser } = require('../services/user');
 const { userSerializer } = require('../serializers/user');
 const { pageSerializer } = require('../serializers/page');
+const { createUser } = require('../interactors/user');
 
 const HTTP_CODES = require('../constants/httpCodes');
 const logger = require('../logger');
@@ -13,8 +14,7 @@ exports.createUser = ({ body }, res, next) => {
       res.status(HTTP_CODES.CREATED).json(userSerializer(user));
     })
     .catch(error => {
-      logger.error(`Failed to create user: ${error.message}`);
-      next(databaseError('Unable to create the user'));
+      next(error);
     });
 };
 
