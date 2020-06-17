@@ -1,8 +1,6 @@
 const { listUser } = require('../services/user');
-const { userSerializer } = require('../serializers/user');
-const { pageSerializer } = require('../serializers/page');
 const { createUser } = require('../interactors/user');
-const { listUser } = require('../services/user');
+
 const { userSerializer } = require('../serializers/user');
 const { pageSerializer } = require('../serializers/page');
 
