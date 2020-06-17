@@ -63,7 +63,7 @@ exports.authenticateEndpoint = async (request, response, next) => {
     const result = await verifyJwt(token, secret);
     const user = await getCurrentUser(result);
     // eslint-disable-next-line require-atomic-updates
-    request.user = result;
+    request.user = user;
     next();
   } catch (err) {
     logger.error(`Unauthorized access: ${err}`);
