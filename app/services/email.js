@@ -23,6 +23,6 @@ exports.sendPlainEmail = async (receivers, subject, body) => {
     text: body
   });
 
-  logger.info('Message sent: %s', info.messageId);
-  logger.info('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  logger.info('Message sent: ', info.messageId);
+  logger.info('Preview URL: ', nodemailer.getTestMessageUrl(info));
 };
