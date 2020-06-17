@@ -2,8 +2,13 @@ const request = require('supertest');
 const app = require('../../app');
 const User = require('../../app/models').user;
 
+const { sendPlainEmail } = require('../../app/services/mailer');
+const { welcomeEmail } = require('../../app/templates/mailer/welcome');
+
+jest.mock('../../app/services/mailer');
 describe('POST #signup', () => {
-  test('With valid params, it creates a User', async done => {
+  test('With valid params, it creates a User and send a welcome email', async done => {
+    sendPlainEmail.mockImplementationOnce(() => null);
     const response = await request(app)
       .post('/users')
       .send({
@@ -28,6 +33,13 @@ describe('POST #signup', () => {
     expect(createdUser[0].firstName).toEqual('Test');
     expect(createdUser[0].lastName).toEqual('McTesting');
     expect(createdUser[0].email).toEqual('test@wolox.com.ar');
+
+    expect(sendPlainEmail.mock.calls.length).toBe(1);
+    expect(sendPlainEmail.mock.calls[0]).toEqual([
+      ['test@wolox.com.ar'],
+      welcomeEmail.subject,
+      welcomeEmail.body(createdUser[0])
+    ]);
     done();
   });
 
