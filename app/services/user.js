@@ -3,6 +3,8 @@ const { findLastKey } = require('lodash');
 const User = require('../models').user;
 const POSITIONS = require('../constants/userPositions');
 
+const { databaseError } = require('../errors');
+
 const hashPassword = require('../helpers/passwordHasherHelper');
 const logger = require('../logger');
 
@@ -41,24 +43,4 @@ exports.updateToAdminUser = user => {
   return user.update({ admin: true });
 };
 
-<<<<<<< HEAD
-exports.getPosition = async userPromise => {
-  logger.info('Getting user position...');
-
-  console.log(weetsId);
-
-  return Rating.findAll({
-    attributes: [[Sequelize.fn('sum', Sequelize.col('score')), 'totalScore']],
-    include: [Weet],
-    where: {
-      id: {
-        [Sequelize.op.in]: userPromise
-          .then(user => user.getWeets())
-          .then(weetsArray => weetsArray.map(weet => weet.id))
-      }
-    }
-  });
-};
-=======
 exports.getPosition = ({ points }) => findLastKey(POSITIONS, positionScore => positionScore <= points);
->>>>>>> Fix test
