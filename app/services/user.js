@@ -52,3 +52,8 @@ exports.findUser = id =>
     if (result) return result;
     throw userNotFound('User not found');
   });
+
+exports.setLogoutTime = user => {
+  logger.info(`Invalidating all sessions for ${user}...`);
+  return user.update({ logoutTime: Date.now() });
+};

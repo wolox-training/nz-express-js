@@ -1,3 +1,5 @@
+/* eslint-disable init-declarations */
+/* eslint-disable no-unused-vars */
 const request = require('supertest');
 const { factory } = require('factory-girl');
 const { factoryByModel } = require('../factory/factory_by_models');
@@ -82,5 +84,70 @@ describe('POST #signin', () => {
     expect(response.body).toHaveProperty('internal_code', 'password_or_email_incorrect');
     expect(response.body).toHaveProperty('message', 'Password not match');
     done();
+  });
+});
+
+describe('POST #invalidate_all', () => {
+  describe('with no authentication', () => {
+    test('It returns an error', async done => {
+      const response = await request(app).post('/users/sessions/invalidate_all');
+
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
+  });
+
+  describe('with authentication', () => {
+    let jwtToken;
+
+    beforeEach(async done => {
+      const userAttributes = await factory.attrs('user');
+
+      await request(app)
+        .post('/users')
+        .send({
+          ...userAttributes,
+          logoutTime: null,
+          email: 'login_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      const loginRequest = await request(app)
+        .post('/users/sessions')
+        .send({
+          email: 'login_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      jwtToken = loginRequest.body.token;
+      done();
+    });
+
+    test('when invalidating all user token, the user must login again to use the auth endpoints', async done => {
+      const invalidateRequest = await request(app)
+        .post('/users/sessions/invalidate_all')
+        .send({
+          email: 'login_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(invalidateRequest.statusCode).toEqual(200);
+
+      const authRequiredRequest = await request(app)
+        .post('/users/sessions/invalidate_all')
+        .send({
+          email: 'login_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(authRequiredRequest.statusCode).toEqual(401);
+      expect(authRequiredRequest.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(authRequiredRequest.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
   });
 });
