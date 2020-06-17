@@ -88,7 +88,6 @@ describe('POST #signin', () => {
 });
 
 describe('POST #invalidate_all', () => {
-  factoryByModel('user');
   describe('with no authentication', () => {
     test('It returns an error', async done => {
       const response = await request(app).post('/users/sessions/invalidate_all');
