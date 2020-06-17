@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const util = require('util');
-const jwt = require('jsonwebtoken');
 
 const { findUserByEmail } = require('../services/user');
 const { sessionError, unauthorizedError } = require('../errors');
