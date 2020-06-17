@@ -92,8 +92,9 @@ describe('POST #createweet', () => {
 });
 
 describe('GET #indexWeet', () => {
+  // eslint-disable-next-line init-declarations
   let jwtToken;
-  factoryByModel('user');
+  factoryByModel('weet');
 
   describe('with no authentication', () => {
     test('It returns an error', async done => {
@@ -109,6 +110,7 @@ describe('GET #indexWeet', () => {
   describe('with authentication', () => {
     beforeEach(async done => {
       const userAttributes = await factory.attrs('user');
+      const weetAtrtibutes = await factory.attrs('weet');
 
       await request(app)
         .post('/users')
@@ -127,10 +129,10 @@ describe('GET #indexWeet', () => {
 
       jwtToken = loginRequest.body.token;
 
+      Weet.bulkCreate(Array(5).fill({ ...weetAtrtibutes, userId: 1 }));
+
       done();
     });
-<<<<<<< HEAD
-=======
 
     test('With valid params, it returns a page', async done => {
       const response = await request(app)
@@ -169,6 +171,5 @@ describe('GET #indexWeet', () => {
       expect(response.body).toHaveProperty('message', 'Page must be 1 or more');
       done();
     });
->>>>>>> Index page
   });
 });
