@@ -8,7 +8,7 @@ const {
 exports.getFacts = number => {
   const url = `${baseUrl}/${number}`;
 
-  axios.get(url).then(({ data }) => {
+  return axios.get(url).then(({ data }) => {
     logger.info(`Fetch number ${number} fact at ${url}: ${data}`);
     return data;
   });
