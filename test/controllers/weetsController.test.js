@@ -90,3 +90,86 @@ describe('POST #createweet', () => {
     });
   });
 });
+
+describe('GET #indexWeet', () => {
+  // eslint-disable-next-line init-declarations
+  let jwtToken;
+  factoryByModel('weet');
+
+  describe('with no authentication', () => {
+    test('It returns an error', async done => {
+      const response = await request(app).get('/weets');
+
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toHaveProperty('internal_code', 'unauthorized');
+      expect(response.body).toHaveProperty('message', 'Unauthorized');
+      done();
+    });
+  });
+
+  describe('with authentication', () => {
+    beforeEach(async done => {
+      const userAttributes = await factory.attrs('user');
+      const weetAtrtibutes = await factory.attrs('weet');
+
+      await request(app)
+        .post('/users')
+        .send({
+          ...userAttributes,
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      const loginRequest = await request(app)
+        .post('/users/sessions')
+        .send({
+          email: 'normal_user@wolox.com.ar',
+          password: 'validpassword12345678'
+        });
+
+      jwtToken = loginRequest.body.token;
+
+      Weet.bulkCreate(Array(5).fill({ ...weetAtrtibutes, userId: 1 }));
+
+      done();
+    });
+
+    test('With valid params, it returns a page', async done => {
+      const response = await request(app)
+        .get('/weets')
+        .query({ limit: 1, page: 1 })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toHaveProperty('data', [{ content: expect.any(String) }]);
+      expect(response.body).toHaveProperty('page', 1);
+      expect(response.body).toHaveProperty('totalElements', 5);
+      expect(response.body).toHaveProperty('totalPages', 5);
+      done();
+    });
+
+    test('With an exced page, it returns a page', async done => {
+      const response = await request(app)
+        .get('/weets')
+        .query({ limit: 1, page: 6 })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(response.statusCode).toEqual(404);
+      expect(response.body).toHaveProperty('internal_code', 'page_does_not_exist');
+      expect(response.body).toHaveProperty('message', 'This page exceed the query');
+      done();
+    });
+
+    test('With invalid params, it returns an error', async done => {
+      const response = await request(app)
+        .get('/weets')
+        .query({ limit: 1, page: -1 })
+        .set('Authorization', `Bearer ${jwtToken}`);
+
+      expect(response.statusCode).toEqual(400);
+      expect(response.body).toHaveProperty('internal_code', 'model_validation_error');
+      expect(response.body).toHaveProperty('message', 'Page must be 1 or more');
+      done();
+    });
+  });
+});

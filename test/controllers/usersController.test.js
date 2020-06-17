@@ -236,17 +236,15 @@ describe('GET #index', () => {
       done();
     });
 
-    test('when asking for the third page, with custom limit, it returns an empty page', async done => {
+    test('when asking for the third page, with custom limit, it returns an error', async done => {
       const response = await request(app)
         .get('/users')
         .query({ limit: 1, page: 3 })
         .set('Authorization', `Bearer ${jwtToken}`);
 
-      expect(response.statusCode).toEqual(200);
-      expect(response.body).toHaveProperty('data', []);
-      expect(response.body).toHaveProperty('page', 3);
-      expect(response.body).toHaveProperty('totalElements', 2);
-      expect(response.body).toHaveProperty('totalPages', 2);
+      expect(response.statusCode).toEqual(404);
+      expect(response.body).toHaveProperty('internal_code', 'page_does_not_exist');
+      expect(response.body).toHaveProperty('message', 'This page exceed the query');
       done();
     });
   });

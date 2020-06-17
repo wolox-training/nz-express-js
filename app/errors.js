@@ -21,3 +21,6 @@ exports.sessionError = message => internalError(message, exports.SESSION_ERROR);
 
 exports.UNAUTHORIZED_ERROR = 'unauthorized';
 exports.unauthorizedError = message => internalError(message, exports.UNAUTHORIZED_ERROR);
+
+exports.PAGE_DOES_NOT_EXIST = 'page_does_not_exist';
+exports.pageLimitExceed = message => internalError(message, exports.PAGE_DOES_NOT_EXIST);
