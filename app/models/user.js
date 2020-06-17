@@ -20,11 +20,17 @@ module.exports = (sequelize, DataTypes) => {
     admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    points: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false
     }
   });
 
-  User.associate = ({ weet }) => {
+  User.associate = ({ weet, rating }) => {
     User.hasMany(weet);
+    User.hasMany(rating);
   };
 
   return User;

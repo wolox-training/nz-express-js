@@ -1,5 +1,10 @@
-const { databaseError } = require('../errors');
+const { findLastKey } = require('lodash');
+
 const User = require('../models').user;
+const POSITIONS = require('../constants/userPositions');
+
+const { databaseError } = require('../errors');
+
 const hashPassword = require('../helpers/passwordHasherHelper');
 const logger = require('../logger');
 
@@ -37,3 +42,5 @@ exports.updateToAdminUser = user => {
   logger.info('Updating user with admin priviliges...');
   return user.update({ admin: true });
 };
+
+exports.getPosition = ({ points }) => findLastKey(POSITIONS, positionScore => positionScore <= points);
