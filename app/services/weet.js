@@ -1,4 +1,4 @@
-const { databaseError } = require('../errors');
+const { databaseError, weetNotFound } = require('../errors');
 const Weet = require('../models').weet;
 const logger = require('../logger');
 
@@ -15,3 +15,9 @@ exports.listWeets = ({ query }) => {
     offset: query.limit * query.page
   });
 };
+
+exports.findWeet = id =>
+  Weet.findByPk(id).then(result => {
+    if (result) return result;
+    throw weetNotFound('Weet not found');
+  });

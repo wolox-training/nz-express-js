@@ -141,7 +141,7 @@ describe('GET #indexWeet', () => {
         .set('Authorization', `Bearer ${jwtToken}`);
 
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toHaveProperty('data', [{ content: expect.any(String) }]);
+      expect(response.body).toHaveProperty('data', [{ id: expect.any(Number), content: expect.any(String) }]);
       expect(response.body).toHaveProperty('page', 1);
       expect(response.body).toHaveProperty('totalElements', 5);
       expect(response.body).toHaveProperty('totalPages', 5);
