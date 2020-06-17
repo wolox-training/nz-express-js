@@ -32,3 +32,8 @@ exports.listUser = request => {
     throw databaseError('Unable to list users');
   });
 };
+
+exports.updateToAdminUser = user => {
+  logger.info('Updating user with admin priviliges...');
+  return user.update({ admin: true });
+};
