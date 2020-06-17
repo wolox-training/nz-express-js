@@ -21,3 +21,14 @@ exports.createUser = body => {
       throw databaseError('Unable to create the user');
     });
 };
+
+exports.listUser = request => {
+  logger.info('Listing users...');
+  return User.findAndCountAll({
+    limit: request.query.limit,
+    offset: request.skip
+  }).catch(error => {
+    logger.error(`Failed to list users: ${error.message}`);
+    throw databaseError('Unable to list users');
+  });
+};
