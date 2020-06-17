@@ -1,7 +1,7 @@
 const { emailRepeatedError } = require('../errors');
 const { findUserByEmail } = require('../services/user');
 const { createUser } = require('../services/user');
-const { sendPlainEmail } = require('../services/email');
+const { sendPlainEmail } = require('../services/mailer');
 
 const { welcomeEmail } = require('../templates/mailer/welcome');
 const logger = require('../logger');

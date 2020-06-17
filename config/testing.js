@@ -8,6 +8,15 @@ exports.config = {
 
     session: {
       secret: 'some-super-secret'
+    },
+
+    mailer: {
+      host: 'smtp.mailtrap.io',
+      port: 42069,
+      auth: {
+        user: 'user',
+        pass: 'pass'
+      }
     }
   }
 };
