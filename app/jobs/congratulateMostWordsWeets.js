@@ -24,6 +24,6 @@ const sendCongratulationsEmail = async () => {
 };
 
 module.exports = {
-  cronJob: new CronJob('* * * * *', () => sendCongratulationsEmail()),
+  cronJob: new CronJob('00 00 00 * * *', () => sendCongratulationsEmail()),
   job: sendCongratulationsEmail
 };
