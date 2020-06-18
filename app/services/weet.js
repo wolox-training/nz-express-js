@@ -23,8 +23,10 @@ exports.findWeet = id =>
     throw weetNotFound('Weet not found');
   });
 
-exports.findMostWordsWeet = () =>
-  Weet.findOne({
+exports.findMostWordsWeet = () => {
+  logger.info('Looking for the most words weet');
+  return Weet.findOne({
     order: [sequelize.literal('sum(array_length(regexp_split_to_array("content", \'\\s\'),1)) DESC')],
     group: ['id']
   });
+};

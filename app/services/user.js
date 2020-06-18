@@ -60,7 +60,7 @@ exports.setLogoutTime = user => {
 };
 
 exports.findMostWordsAuthor = async () => {
-  logger.info('Looking for the most words weet');
+  logger.info('Looking for the best author');
   try {
     const mostWordsWeet = await findMostWordsWeet();
     const bestUser = await User.findByPk(mostWordsWeet.userId);
