@@ -8,7 +8,7 @@ module.exports = () => {
     .filter(file => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js')
     .forEach(file => {
       // eslint-disable-next-line global-require
-      const job = require(`./${file}`);
-      job.start();
+      const { cronJob } = require(`./${file}`);
+      cronJob.start();
     });
 };

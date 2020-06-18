@@ -6,9 +6,10 @@ const { sendPlainEmail } = require('../services/mailer');
 const { congratulationsEmail } = require('../templates/mailer/congratulations');
 const logger = require('../logger');
 
-module.exports = new CronJob('00 00 00 * * *', async () => {
+const sendCongratulationsEmail = async () => {
   try {
     logger.info('Starting congratulations mail sender..');
+
     const mayorWeetUser = await findMostWordsAuthor();
     sendPlainEmail(
       [mayorWeetUser.email],
@@ -20,4 +21,9 @@ module.exports = new CronJob('00 00 00 * * *', async () => {
   }
 
   logger.info('Finish congratulations mail sender...');
-});
+};
+
+module.exports = {
+  cronJob: new CronJob('* * * * *', () => sendCongratulationsEmail()),
+  job: sendCongratulationsEmail
+};
