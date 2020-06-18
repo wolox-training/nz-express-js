@@ -1,11 +1,12 @@
 const { findLastKey } = require('lodash');
 
 const { userNotFound } = require('../errors');
+const { databaseError } = require('../errors');
 
 const User = require('../models').user;
 const POSITIONS = require('../constants/userPositions');
 
-const { databaseError } = require('../errors');
+const { findMostWordsWeet } = require('../services/weet');
 
 const hashPassword = require('../helpers/passwordHasherHelper');
 const logger = require('../logger');
@@ -56,4 +57,18 @@ exports.findUser = id =>
 exports.setLogoutTime = user => {
   logger.info(`Invalidating all sessions for ${user}...`);
   return user.update({ logoutTime: Date.now() });
+};
+
+exports.findMostWordsAuthor = async () => {
+  logger.info('Looking for the most words weet');
+  try {
+    const mostWordsWeet = await findMostWordsWeet();
+    const bestUser = await User.findByPk(mostWordsWeet.userId);
+
+    if (!bestUser) throw userNotFound('User not found');
+    return bestUser;
+  } catch (err) {
+    logger.error(`Failed to find most words weeted user: ${err.message}`);
+    throw databaseError('Unable to find most words weeted user');
+  }
 };

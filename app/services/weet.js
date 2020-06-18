@@ -1,6 +1,7 @@
 const { databaseError, weetNotFound } = require('../errors');
 const Weet = require('../models').weet;
 const logger = require('../logger');
+const { sequelize } = require('../models');
 
 exports.createWeet = (user, randomQuote) =>
   Weet.create({ content: randomQuote, userId: user.id }).catch(error => {
@@ -20,4 +21,10 @@ exports.findWeet = id =>
   Weet.findByPk(id).then(result => {
     if (result) return result;
     throw weetNotFound('Weet not found');
+  });
+
+exports.findMostWordsWeet = () =>
+  Weet.findOne({
+    order: [sequelize.literal('sum(array_length(regexp_split_to_array("content", \'\\s\'),1)) DESC')],
+    group: ['id']
   });
