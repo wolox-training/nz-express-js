@@ -6,7 +6,7 @@ const { sendPlainEmail } = require('../services/mailer');
 const { congratulationsEmail } = require('../templates/mailer/congratulations');
 const logger = require('../logger');
 
-module.exports = new CronJob('* * * * *', async () => {
+module.exports = new CronJob('00 00 00 * * *', async () => {
   try {
     logger.info('Starting congratulations mail sender..');
     const mayorWeetUser = await findMostWordsAuthor();
